@@ -152,6 +152,11 @@ const tick = () => sleep(0);
 const esc = s => (s || "").replace(/[&<>"]/g, m => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[m]));
 const b64 = str => btoa(String.fromCharCode(...new TextEncoder().encode(str)));
 
+const UA = navigator.userAgent;
+const IS_MOBILE = /Android|iPhone|iPad|iPod/i.test(UA);
+const IN_APP = /KAKAOTALK|NAVER\(inapp|Instagram|FBAN|FBAV|Line\//i.test(UA);
+const CAN_SHARE = !!(navigator.canShare && navigator.share);
+
 let TOKEN = "", isAdmin = false, cards = [], idxSha = null, current = null;
 
 /* ── GitHub ── */
@@ -240,24 +245,48 @@ $("#grid").addEventListener("click", e => {
   $("#vName").textContent = current.name;
   $("#vMeta").textContent = [current.company, current.tag].filter(Boolean).join(" · ");
   $("#vImg").src = rawUrl(current.file);
-  $("#vNote").textContent = "";
+  $("#vNote").textContent = IN_APP
+    ? "카카오톡 등 앱 안의 브라우저에서는 저장이 막힐 수 있습니다. 우측 상단 메뉴에서 다른 브라우저로 열기를 선택하시면 확실합니다."
+    : "";
+  $("#dl").textContent = (IS_MOBILE && CAN_SHARE) ? "사진 저장 · 공유" : "이미지 다운로드";
   document.querySelectorAll(".admin-only").forEach(n => n.classList.toggle("hidden", !isAdmin));
   $("#view").showModal();
 });
 $("#dl").addEventListener("click", async () => {
-  const btn = $("#dl"); btn.disabled = true; btn.textContent = "받는 중…";
+  const btn = $("#dl"), label = btn.textContent;
+  btn.disabled = true; btn.textContent = "준비 중…";
+  const ext = current.file.split(".").pop();
+  const fname = `${current.name}_${current.company || "프로필명함"}.${ext}`.replace(/[\/\\:*?"<>|]/g, "");
   try {
     const res = await fetch(rawUrl(current.file));
+    if (!res.ok) throw new Error("이미지를 가져오지 못했습니다");
     const blob = await res.blob();
+
+    /* 휴대폰: 공유 시트로 — 사진에 저장하거나 카톡으로 바로 보낼 수 있습니다 */
+    if (CAN_SHARE) {
+      const f = new File([blob], fname, { type: blob.type || "image/jpeg" });
+      if (navigator.canShare({ files: [f] })) {
+        try {
+          await navigator.share({ files: [f], title: current.name });
+          btn.disabled = false; btn.textContent = label;
+          return;
+        } catch (e) {
+          if (e && e.name === "AbortError") { btn.disabled = false; btn.textContent = label; return; }
+        }
+      }
+    }
+
+    /* PC: 바로 내려받기 */
     const url = URL.createObjectURL(blob);
-    const ext = current.file.split(".").pop();
     const a = document.createElement("a");
-    a.href = url;
-    a.download = `${current.name}_${current.company || "프로필명함"}.${ext}`.replace(/[\/\\:*?"<>|]/g, "");
+    a.href = url; a.download = fname;
     document.body.appendChild(a); a.click(); a.remove();
-    setTimeout(() => URL.revokeObjectURL(url), 4000);
-  } catch { $("#vNote").textContent = "다운로드에 실패했습니다. 이미지를 길게 눌러 저장해 주세요."; }
-  btn.disabled = false; btn.textContent = "이미지 다운로드";
+    setTimeout(() => URL.revokeObjectURL(url), 5000);
+    if (IS_MOBILE) $("#vNote").textContent = "갤러리에 없으면 다운로드 폴더를 확인하세요. 위 이미지를 길게 눌러 이미지 저장을 선택하면 갤러리에 바로 들어갑니다.";
+  } catch (e) {
+    $("#vNote").textContent = "저장이 막혔습니다. 위 이미지를 길게 눌러 이미지 저장을 선택하거나, 이 주소를 크롬·사파리에서 열어주세요.";
+  }
+  btn.disabled = false; btn.textContent = label;
 });
 $("#vClose").addEventListener("click", () => $("#view").close());
 
