@@ -96,6 +96,9 @@
     <button class="btn violet" id="dl">이미지 다운로드</button>
     <button class="btn ghost" id="vClose">닫기</button>
   </div>
+  <div class="row hidden" id="extRow">
+    <button class="btn ghost small" id="openExt">크롬·사파리로 열기</button>
+  </div>
   <div class="row admin-only hidden">
     <button class="btn ghost small" id="vRename">정보 수정</button>
     <button class="btn danger small" id="vDelete">이 명함 삭제</button>
@@ -245,16 +248,23 @@ $("#grid").addEventListener("click", e => {
   $("#vName").textContent = current.name;
   $("#vMeta").textContent = [current.company, current.tag].filter(Boolean).join(" · ");
   $("#vImg").src = rawUrl(current.file);
-  $("#vNote").textContent = IN_APP
-    ? "카카오톡 등 앱 안의 브라우저에서는 저장이 막힐 수 있습니다. 우측 상단 메뉴에서 다른 브라우저로 열기를 선택하시면 확실합니다."
+  const limited = IS_MOBILE && !CAN_SHARE;     // 앱 안의 브라우저
+  $("#extRow").classList.toggle("hidden", !limited);
+  $("#vNote").textContent = limited
+    ? "앱 안의 브라우저라 바로 저장이 안 됩니다. 사진 크게 보기를 누른 뒤 이미지를 길게 눌러 저장하세요."
     : "";
-  $("#dl").textContent = (IS_MOBILE && CAN_SHARE) ? "사진 저장 · 공유" : "이미지 다운로드";
+  $("#dl").textContent = limited ? "사진 크게 보기" : (CAN_SHARE && IS_MOBILE ? "사진 저장 · 공유" : "이미지 다운로드");
   document.querySelectorAll(".admin-only").forEach(n => n.classList.toggle("hidden", !isAdmin));
   $("#view").showModal();
 });
 $("#dl").addEventListener("click", async () => {
   const btn = $("#dl"), label = btn.textContent;
   btn.disabled = true; btn.textContent = "준비 중…";
+  if (IS_MOBILE && !CAN_SHARE) {                // 앱 안의 브라우저: 이미지만 띄워 길게 눌러 저장
+    btn.disabled = false; btn.textContent = label;
+    window.open(rawUrl(current.file), "_blank") || (location.href = rawUrl(current.file));
+    return;
+  }
   const ext = current.file.split(".").pop();
   const fname = `${current.name}_${current.company || "프로필명함"}.${ext}`.replace(/[\/\\:*?"<>|]/g, "");
   try {
@@ -287,6 +297,13 @@ $("#dl").addEventListener("click", async () => {
     $("#vNote").textContent = "저장이 막혔습니다. 위 이미지를 길게 눌러 이미지 저장을 선택하거나, 이 주소를 크롬·사파리에서 열어주세요.";
   }
   btn.disabled = false; btn.textContent = label;
+});
+$("#openExt").addEventListener("click", async () => {
+  const here = location.href.split("#")[0];
+  if (/KAKAOTALK/i.test(UA)) { location.href = "kakaotalk://web/openExternal?url=" + encodeURIComponent(here); return; }
+  if (/NAVER\(inapp/i.test(UA)) { location.href = "naversearchapp://inappbrowser?target=new&url=" + encodeURIComponent(here); return; }
+  try { await navigator.clipboard.writeText(here); $("#vNote").textContent = "주소를 복사했습니다. 크롬이나 사파리를 열어 붙여넣기 하세요."; }
+  catch { $("#vNote").textContent = "이 주소를 크롬이나 사파리에서 열어주세요: " + here; }
 });
 $("#vClose").addEventListener("click", () => $("#view").close());
 
