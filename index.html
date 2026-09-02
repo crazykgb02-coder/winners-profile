@@ -1,0 +1,457 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>BNI 위너스챕터 · 프로필 명함</title>
+<style>
+  :root{--ink:#141319;--ink-soft:#5d5b66;--paper:#f6f5f2;--line:#e2e0da;
+    --violet:#5b21d6;--violet-soft:#efe9ff;--red:#b3122a;--radius:10px}
+  *{box-sizing:border-box}
+  html{-webkit-text-size-adjust:100%}
+  body{margin:0;background:var(--paper);color:var(--ink);line-height:1.5;
+    font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",system-ui,-apple-system,sans-serif}
+  .wrap{max-width:1080px;margin:0 auto;padding:26px 18px 72px}
+  header{padding:6px 0 20px;border-bottom:1px solid var(--line);margin-bottom:20px}
+  .brand{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+  h1{font-size:26px;font-weight:800;letter-spacing:-.03em;margin:0}
+  .brand span{font-size:13px;color:var(--ink-soft);font-weight:600}
+  .lede{margin:8px 0 16px;font-size:14px;color:var(--ink-soft);max-width:52ch}
+  .toolbar{display:flex;gap:8px;align-items:center}
+  input[type=search],input[type=text],input[type=password]{width:100%;padding:11px 13px;
+    border:1px solid var(--line);border-radius:var(--radius);background:#fff;font:inherit;font-size:15px;color:var(--ink)}
+  input:focus-visible,button:focus-visible{outline:2px solid var(--violet);outline-offset:2px}
+  .count{font-size:13px;color:var(--ink-soft);white-space:nowrap}
+  .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+  @media(min-width:640px){.grid{grid-template-columns:repeat(3,1fr)}}
+  @media(min-width:900px){.grid{grid-template-columns:repeat(4,1fr)}}
+  .card{background:none;border:0;padding:0;font:inherit;text-align:left;cursor:pointer;display:block}
+  .card figure{margin:0;border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;background:#fff}
+  .card img{display:block;width:100%;height:auto;aspect-ratio:4/5;object-fit:cover;object-position:top center}
+  .card b{display:block;margin-top:9px;font-size:15px;font-weight:700;letter-spacing:-.02em}
+  .card small{display:block;color:var(--ink-soft);font-size:13px}
+  .card:hover figure{border-color:var(--violet)}
+  .empty{border:1px dashed var(--line);border-radius:var(--radius);padding:40px 20px;text-align:center;color:var(--ink-soft);font-size:14px}
+  footer{margin-top:40px;padding-top:16px;border-top:1px solid var(--line);display:flex;
+    justify-content:space-between;align-items:center;gap:12px;font-size:13px;color:var(--ink-soft)}
+  button{font:inherit;cursor:pointer}
+  .btn{padding:11px 16px;border-radius:var(--radius);border:1px solid var(--ink);background:var(--ink);color:#fff;font-weight:700;font-size:15px}
+  .btn.ghost{background:#fff;color:var(--ink)}
+  .btn.violet{background:var(--violet);border-color:var(--violet)}
+  .btn.danger{background:#fff;color:var(--red);border-color:#e8c2c9}
+  .btn.small{padding:7px 12px;font-size:13px}
+  .btn:disabled{opacity:.5;cursor:default}
+  .linkish{background:none;border:0;color:var(--ink-soft);text-decoration:underline;padding:4px}
+  dialog{border:0;padding:0;border-radius:14px;max-width:min(560px,94vw);width:100%;background:#fff;color:var(--ink)}
+  dialog::backdrop{background:rgba(20,19,25,.62)}
+  .sheet{padding:20px}
+  .sheet h2{margin:0 0 4px;font-size:19px;letter-spacing:-.02em}
+  .sheet p.meta{margin:0 0 14px;color:var(--ink-soft);font-size:14px}
+  .preview{width:100%;border:1px solid var(--line);border-radius:var(--radius);display:block;max-height:56vh;object-fit:contain;background:var(--paper)}
+  .row{display:flex;gap:8px;margin-top:14px;flex-wrap:wrap}
+  .row .btn{flex:1 1 auto}
+  .field{margin-bottom:12px}
+  .field label{display:block;font-size:13px;font-weight:700;margin-bottom:5px}
+  .stage{border:1px solid var(--line);border-radius:var(--radius);padding:12px;margin-bottom:10px;display:flex;gap:12px;align-items:flex-start}
+  .stage img{width:72px;height:90px;object-fit:cover;border-radius:6px;border:1px solid var(--line)}
+  .stage .fields{flex:1;min-width:0}
+  .stage input{margin-bottom:6px;padding:8px 10px;font-size:14px}
+  .stage .x{border:1px solid var(--line);background:#fff;color:var(--ink-soft);border-radius:6px;width:28px;height:28px;line-height:1;font-size:15px;flex:none}
+  .stage .x:hover{color:var(--red);border-color:#e8c2c9}
+  .note{font-size:12.5px;color:var(--ink-soft);margin:10px 0 0}
+  .note.bad{color:var(--red)}
+  .warn{background:var(--violet-soft);color:#3d1a94;border-radius:var(--radius);padding:10px 12px;font-size:13px;margin-bottom:14px}
+  .alert{background:#fdecef;color:var(--red);border-radius:var(--radius);padding:10px 12px;font-size:13px;margin-bottom:16px}
+  .hidden{display:none!important}
+  .spin{display:inline-block;width:14px;height:14px;border:2px solid var(--line);border-top-color:var(--violet);border-radius:50%;animation:s .7s linear infinite;vertical-align:-2px}
+  @keyframes s{to{transform:rotate(360deg)}}
+  @media(prefers-reduced-motion:reduce){.spin{animation-duration:2s}}
+</style>
+
+<div class="wrap">
+  <header>
+    <div class="brand"><h1>프로필 명함 보관함</h1><span>BNI 위너스챕터</span></div>
+    <p class="lede">필요한 멤버의 명함을 눌러 이미지로 바로 내려받으세요. 카톡·문자·메일에 그대로 붙여 쓸 수 있습니다.</p>
+    <div class="toolbar">
+      <input id="q" type="search" placeholder="이름, 회사, 업종 검색" autocomplete="off">
+      <span class="count" id="count"></span>
+    </div>
+  </header>
+
+  <div id="alert" class="alert hidden"></div>
+  <div id="grid" class="grid"></div>
+  <div id="empty" class="empty hidden">아직 등록된 명함이 없습니다.</div>
+
+  <footer>
+    <span id="mode"><span class="spin"></span> 불러오는 중…</span>
+    <span>
+      <button class="linkish" id="reload">새로고침</button>
+      <button class="linkish" id="adminBtn">관리자</button>
+    </span>
+  </footer>
+</div>
+
+<dialog id="view"><div class="sheet">
+  <h2 id="vName"></h2>
+  <p class="meta" id="vMeta"></p>
+  <img id="vImg" class="preview" alt="">
+  <div class="row">
+    <button class="btn violet" id="dl">이미지 다운로드</button>
+    <button class="btn ghost" id="vClose">닫기</button>
+  </div>
+  <div class="row admin-only hidden">
+    <button class="btn ghost small" id="vRename">정보 수정</button>
+    <button class="btn danger small" id="vDelete">이 명함 삭제</button>
+  </div>
+  <p class="note" id="vNote"></p>
+</div></dialog>
+
+<dialog id="login"><div class="sheet">
+  <h2>관리자 로그인</h2>
+  <p class="meta">GitHub 토큰을 붙여넣으면 명함을 올리고 지울 수 있습니다. 토큰은 이 창을 닫으면 사라지며 어디에도 저장되지 않습니다.</p>
+  <div class="field"><input id="token" type="password" placeholder="github_pat_..." autocomplete="off"></div>
+  <p class="note bad hidden" id="loginErr"></p>
+  <div class="row">
+    <button class="btn violet" id="loginGo">로그인</button>
+    <button class="btn ghost" id="loginClose">취소</button>
+  </div>
+</div></dialog>
+
+<dialog id="upload"><div class="sheet">
+  <h2>명함 올리기</h2>
+  <p class="meta">PNG·JPG·GIF 이미지를 한 번에 여러 장 선택할 수 있습니다.</p>
+  <div class="warn">저장하면 이 주소에 접속하는 모든 사람에게 공개됩니다.</div>
+  <div class="field"><input id="files" type="file" accept="image/*" multiple></div>
+  <div id="stage"></div>
+  <div class="row">
+    <button class="btn violet" id="saveAll">모두 저장</button>
+    <button class="btn ghost" id="clearAll">목록 비우기</button>
+    <button class="btn ghost" id="upClose">닫기</button>
+  </div>
+  <p class="note" id="upNote"></p>
+</div></dialog>
+
+<dialog id="setup"><div class="sheet">
+  <h2>저장소 연결</h2>
+  <p class="meta">명함이 저장될 GitHub 저장소를 알려주세요. GitHub Pages 주소에서 열면 자동으로 잡힙니다.</p>
+  <div class="field"><label for="owner">GitHub 아이디</label><input id="owner" type="text" placeholder="예: kangkeunbo"></div>
+  <div class="field"><label for="repo">저장소 이름</label><input id="repo" type="text" placeholder="예: winners-profile"></div>
+  <div class="row"><button class="btn violet" id="setupGo">연결</button></div>
+</div></dialog>
+
+<script>
+/* ── 설정: GitHub Pages 주소에서 열면 자동 인식됩니다.
+      다른 곳에 올릴 때만 아래 두 줄을 채우세요. ───────────── */
+let GH_OWNER  = "";
+let GH_REPO   = "";
+const GH_BRANCH = "main";
+const GH_DIR    = "cards";
+/* ──────────────────────────────────────────────────────── */
+
+const MAX_SIDE = 2000, JPEG_TARGET = 1_600_000;
+const $ = s => document.querySelector(s);
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const tick = () => sleep(0);
+const esc = s => (s || "").replace(/[&<>"]/g, m => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[m]));
+const b64 = str => btoa(String.fromCharCode(...new TextEncoder().encode(str)));
+
+let TOKEN = "", isAdmin = false, cards = [], idxSha = null, current = null;
+
+/* ── GitHub ── */
+const api = p => `https://api.github.com/repos/${GH_OWNER}/${GH_REPO}/contents/${p}`;
+const rawUrl = f => `https://raw.githubusercontent.com/${GH_OWNER}/${GH_REPO}/${GH_BRANCH}/${GH_DIR}/${f}`;
+
+async function ghGet(path) {
+  const r = await fetch(api(path) + "?ref=" + GH_BRANCH + "&t=" + Date.now(),
+    { headers: { Accept: "application/vnd.github+json", ...(TOKEN ? { Authorization: "Bearer " + TOKEN } : {}) } });
+  if (r.status === 404) return null;
+  if (!r.ok) throw new Error(await msg(r));
+  return r.json();
+}
+async function ghPut(path, contentB64, sha, message) {
+  const r = await fetch(api(path), {
+    method: "PUT",
+    headers: { Accept: "application/vnd.github+json", Authorization: "Bearer " + TOKEN, "Content-Type": "application/json" },
+    body: JSON.stringify({ message, content: contentB64, branch: GH_BRANCH, ...(sha ? { sha } : {}) })
+  });
+  if (!r.ok) throw new Error(await msg(r));
+  return r.json();
+}
+async function ghDel(path, sha, message) {
+  const r = await fetch(api(path), {
+    method: "DELETE",
+    headers: { Accept: "application/vnd.github+json", Authorization: "Bearer " + TOKEN, "Content-Type": "application/json" },
+    body: JSON.stringify({ message, sha, branch: GH_BRANCH })
+  });
+  if (!r.ok) throw new Error(await msg(r));
+}
+async function msg(r) {
+  let d = ""; try { d = (await r.json()).message || ""; } catch {}
+  if (r.status === 401) return "토큰이 올바르지 않습니다";
+  if (r.status === 403) return "권한이 없거나 요청이 너무 잦습니다";
+  if (r.status === 404) return "저장소나 경로를 찾지 못했습니다";
+  if (r.status === 409) return "다른 변경과 충돌했습니다. 새로고침 후 다시 시도하세요";
+  if (r.status === 413) return "파일이 너무 큽니다";
+  return `${r.status} ${d}`;
+}
+
+/* 목록 읽기 */
+async function loadAll() {
+  $("#alert").classList.add("hidden");
+  try {
+    const f = await ghGet(GH_DIR + "/index.json");
+    if (f) {
+      idxSha = f.sha;
+      cards = JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(f.content.replace(/\n/g, "")), c => c.charCodeAt(0))));
+    } else { idxSha = null; cards = []; }
+    $("#mode").textContent = `${GH_OWNER}/${GH_REPO} · 링크가 있는 누구나 열람·다운로드`;
+  } catch (e) {
+    cards = [];
+    $("#alert").textContent = "명함 목록을 불러오지 못했습니다 — " + e.message;
+    $("#alert").classList.remove("hidden");
+    $("#mode").textContent = `${GH_OWNER}/${GH_REPO}`;
+  }
+  render();
+}
+async function saveIndex(message) {
+  const put = await ghPut(GH_DIR + "/index.json", b64(JSON.stringify(cards, null, 1)), idxSha, message);
+  idxSha = put.content.sha;
+}
+
+/* ── 렌더 ── */
+function render() {
+  const term = $("#q").value.trim().toLowerCase();
+  const list = cards.filter(c => !term ||
+    (c.name + " " + (c.company || "") + " " + (c.tag || "")).toLowerCase().includes(term));
+  $("#count").textContent = list.length ? list.length + "명" : "";
+  $("#empty").classList.toggle("hidden", cards.length > 0);
+  $("#grid").innerHTML = list.map(c => `
+    <button class="card" data-id="${c.id}">
+      <figure><img src="${rawUrl(c.file)}" alt="${esc(c.name)} 프로필 명함" loading="lazy"></figure>
+      <b>${esc(c.name)}</b><small>${esc(c.company || "")}${c.tag ? " · " + esc(c.tag) : ""}</small>
+    </button>`).join("");
+}
+$("#q").addEventListener("input", render);
+$("#reload").addEventListener("click", async e => {
+  e.target.textContent = "불러오는 중…"; await loadAll(); e.target.textContent = "새로고침";
+});
+
+/* ── 열람 & 다운로드 ── */
+$("#grid").addEventListener("click", e => {
+  const b = e.target.closest(".card"); if (!b) return;
+  current = cards.find(c => c.id === b.dataset.id); if (!current) return;
+  $("#vName").textContent = current.name;
+  $("#vMeta").textContent = [current.company, current.tag].filter(Boolean).join(" · ");
+  $("#vImg").src = rawUrl(current.file);
+  $("#vNote").textContent = "";
+  document.querySelectorAll(".admin-only").forEach(n => n.classList.toggle("hidden", !isAdmin));
+  $("#view").showModal();
+});
+$("#dl").addEventListener("click", async () => {
+  const btn = $("#dl"); btn.disabled = true; btn.textContent = "받는 중…";
+  try {
+    const res = await fetch(rawUrl(current.file));
+    const blob = await res.blob();
+    const url = URL.createObjectURL(blob);
+    const ext = current.file.split(".").pop();
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = `${current.name}_${current.company || "프로필명함"}.${ext}`.replace(/[\/\\:*?"<>|]/g, "");
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 4000);
+  } catch { $("#vNote").textContent = "다운로드에 실패했습니다. 이미지를 길게 눌러 저장해 주세요."; }
+  btn.disabled = false; btn.textContent = "이미지 다운로드";
+});
+$("#vClose").addEventListener("click", () => $("#view").close());
+
+/* ── 관리자 ── */
+$("#adminBtn").addEventListener("click", () => {
+  if (isAdmin) { $("#upload").showModal(); return; }
+  $("#loginErr").classList.add("hidden"); $("#token").value = ""; $("#login").showModal();
+});
+$("#loginClose").addEventListener("click", () => $("#login").close());
+$("#token").addEventListener("keydown", e => { if (e.key === "Enter") $("#loginGo").click(); });
+$("#loginGo").addEventListener("click", async () => {
+  const t = $("#token").value.trim();
+  if (!t) return;
+  $("#loginGo").disabled = true;
+  const keep = TOKEN; TOKEN = t;
+  try {
+    const r = await fetch(`https://api.github.com/repos/${GH_OWNER}/${GH_REPO}`,
+      { headers: { Accept: "application/vnd.github+json", Authorization: "Bearer " + TOKEN } });
+    if (!r.ok) throw new Error(await msg(r));
+    const info = await r.json();
+    if (!info.permissions || !info.permissions.push) throw new Error("이 토큰에는 쓰기 권한이 없습니다");
+    isAdmin = true; $("#adminBtn").textContent = "명함 올리기";
+    $("#login").close(); $("#upload").showModal();
+  } catch (e) {
+    TOKEN = keep;
+    $("#loginErr").textContent = e.message;
+    $("#loginErr").classList.remove("hidden");
+  }
+  $("#loginGo").disabled = false;
+});
+$("#upClose").addEventListener("click", () => $("#upload").close());
+
+/* ── 업로드 준비 ── */
+let staged = [], failed = [];
+$("#files").addEventListener("change", async e => {
+  const files = [...e.target.files]; if (!files.length) return;
+  failed = []; $("#upNote").textContent = "";
+  for (let i = 0; i < files.length; i++) {
+    const f = files[i];
+    $("#stage").innerHTML = `<p class='note'><span class='spin'></span> ${i + 1}/${files.length} · ${esc(f.name)} 처리 중…</p>`;
+    await tick();
+    try {
+      const bmp = await decode(f);
+      const { url, ext } = await encode(bmp);
+      if (bmp.close) bmp.close();
+      staged.push({
+        id: "c" + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
+        name: f.name.replace(/\.[^.]+$/, ""), company: "", tag: "", url, ext
+      });
+    } catch (err) { failed.push(`${esc(f.name)} — 처리 실패 (${esc(err.message || err)})`); }
+  }
+  e.target.value = "";
+  drawStage();
+});
+function drawStage() {
+  $("#stage").innerHTML = staged.map((s, i) => `
+    <div class="stage">
+      <img src="${s.url}" alt="">
+      <div class="fields">
+        <input data-i="${i}" data-k="name" value="${esc(s.name)}" placeholder="이름">
+        <input data-i="${i}" data-k="company" value="${esc(s.company)}" placeholder="회사명">
+        <input data-i="${i}" data-k="tag" value="${esc(s.tag)}" placeholder="업종 (선택)">
+      </div>
+      <button class="x" data-del="${i}" aria-label="목록에서 빼기">×</button>
+    </div>`).join("") + failed.map(l => `<p class='note bad'>${l}</p>`).join("");
+  $("#stage").oninput = e => {
+    const t = e.target; if (t.dataset.i === undefined) return;
+    staged[t.dataset.i][t.dataset.k] = t.value;
+  };
+  $("#stage").onclick = e => {
+    const b = e.target.closest("[data-del]"); if (!b) return;
+    staged.splice(+b.dataset.del, 1); drawStage();
+  };
+}
+$("#clearAll").addEventListener("click", () => {
+  staged = []; failed = []; $("#files").value = ""; $("#stage").innerHTML = ""; $("#upNote").textContent = "";
+});
+
+async function decode(file) {
+  if (window.createImageBitmap) { try { return await createImageBitmap(file); } catch {} }
+  const u = URL.createObjectURL(file);
+  try {
+    return await new Promise((res, rej) => {
+      const img = new Image();
+      const t = setTimeout(() => rej(new Error("시간 초과")), 25000);
+      img.onload = () => { clearTimeout(t); res(img); };
+      img.onerror = () => { clearTimeout(t); rej(new Error("이미지를 읽지 못함")); };
+      img.src = u;
+    });
+  } finally { setTimeout(() => URL.revokeObjectURL(u), 1000); }
+}
+async function encode(bmp) {
+  const w = bmp.width, h = bmp.height;
+  if (!w || !h) throw new Error("크기를 알 수 없음");
+  const toURL = (side, type, q) => new Promise((res, rej) => {
+    const sc = Math.min(1, side / Math.max(w, h));
+    const cv = document.createElement("canvas");
+    cv.width = Math.max(1, Math.round(w * sc)); cv.height = Math.max(1, Math.round(h * sc));
+    const ctx = cv.getContext("2d");
+    ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, cv.width, cv.height);
+    ctx.drawImage(bmp, 0, 0, cv.width, cv.height);
+    if (!cv.toBlob) { try { return res(cv.toDataURL(type, q)); } catch { return rej(new Error("변환 실패")); } }
+    cv.toBlob(b => {
+      if (!b) return rej(new Error("변환 실패"));
+      const fr = new FileReader();
+      fr.onload = () => res(fr.result); fr.onerror = () => rej(new Error("읽기 실패"));
+      fr.readAsDataURL(b);
+    }, type, q);
+  });
+  if (w * h <= 9_000_000) {
+    try { const png = await toURL(MAX_SIDE, "image/png"); if (png.length <= 2_600_000) return { url: png, ext: "png" }; } catch {}
+  }
+  let side = MAX_SIDE, q = .92, out = "";
+  for (let t = 0; t < 8; t++) {
+    out = await toURL(side, "image/jpeg", q);
+    if (out.length <= JPEG_TARGET) break;
+    if (q > .62) q -= .1; else side = Math.round(side * .85);
+    await tick();
+  }
+  if (!out) throw new Error("압축 실패");
+  return { url: out, ext: "jpg" };
+}
+
+/* ── 저장 ── */
+$("#saveAll").addEventListener("click", async () => {
+  if (!staged.length) { $("#upNote").textContent = "먼저 이미지를 선택하세요."; return; }
+  $("#saveAll").disabled = true;
+  const errs = [], done = []; let ok = 0;
+  for (let i = 0; i < staged.length; i++) {
+    const s = staged[i];
+    $("#upNote").innerHTML = `<span class='spin'></span> ${i + 1}/${staged.length} · ${esc(s.name)} 올리는 중…`;
+    await tick();
+    const file = `${s.id}.${s.ext}`;
+    try {
+      await ghPut(`${GH_DIR}/${file}`, s.url.split(",")[1], null, `명함 추가: ${s.name}`);
+      cards.push({ id: s.id, name: s.name.trim() || "이름 없음", company: s.company.trim(), tag: s.tag.trim(), file });
+      done.push(s.id); ok++;
+    } catch (e) { errs.push(`${esc(s.name)} — ${esc(e.message)}`); }
+  }
+  if (ok) {
+    try { await saveIndex(`목록 갱신 (+${ok})`); }
+    catch (e) {
+      try { const f = await ghGet(GH_DIR + "/index.json"); idxSha = f ? f.sha : null; await saveIndex("목록 갱신"); }
+      catch (e2) { errs.push("목록 저장 실패 — " + esc(e2.message)); }
+    }
+  }
+  staged = staged.filter(s => !done.includes(s.id));
+  failed = errs; drawStage();
+  $("#saveAll").disabled = false;
+  $("#upNote").innerHTML = ok
+    ? `${ok}장 저장 완료 · 링크를 가진 누구나 바로 받을 수 있습니다.` + (errs.length ? ` ${errs.length}장 실패.` : "")
+    : "저장하지 못했습니다. 아래 사유를 확인하세요.";
+  render();
+});
+
+/* ── 수정 · 삭제 ── */
+$("#vRename").addEventListener("click", async () => {
+  const name = prompt("이름", current.name); if (name === null) return;
+  const company = prompt("회사명", current.company || "") ?? "";
+  const tag = prompt("업종", current.tag || "") ?? "";
+  Object.assign(current, { name: name.trim() || current.name, company: company.trim(), tag: tag.trim() });
+  try { await saveIndex(`정보 수정: ${current.name}`); render(); }
+  catch (e) { $("#vNote").textContent = "수정 저장 실패 — " + e.message; return; }
+  $("#vName").textContent = current.name;
+  $("#vMeta").textContent = [current.company, current.tag].filter(Boolean).join(" · ");
+});
+$("#vDelete").addEventListener("click", async () => {
+  if (!confirm(`${current.name} 명함을 삭제할까요? 되돌릴 수 없습니다.`)) return;
+  const c = current;
+  $("#vNote").innerHTML = "<span class='spin'></span> 삭제 중…";
+  try {
+    const f = await ghGet(`${GH_DIR}/${c.file}`);
+    if (f) await ghDel(`${GH_DIR}/${c.file}`, f.sha, `명함 삭제: ${c.name}`);
+    cards = cards.filter(x => x.id !== c.id);
+    await saveIndex(`명함 삭제: ${c.name}`);
+    $("#view").close(); render();
+  } catch (e) { $("#vNote").textContent = "삭제 실패 — " + e.message; }
+});
+
+/* ── 시작 ── */
+$("#setupGo").addEventListener("click", () => {
+  GH_OWNER = $("#owner").value.trim(); GH_REPO = $("#repo").value.trim();
+  if (!GH_OWNER || !GH_REPO) return;
+  $("#setup").close(); loadAll();
+});
+(function start() {
+  if (!GH_OWNER || !GH_REPO) {
+    const h = location.hostname, seg = location.pathname.split("/").filter(Boolean);
+    if (h.endsWith("github.io")) {
+      GH_OWNER = h.replace(".github.io", "");
+      GH_REPO = seg.length && !seg[0].includes(".") ? seg[0] : h;
+    }
+  }
+  if (GH_OWNER && GH_REPO) loadAll();
+  else { $("#mode").textContent = "저장소 미연결"; $("#setup").showModal(); }
+})();
+</script>
